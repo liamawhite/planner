@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package planner.v1;
+
+option go_package = "github.com/liamawhite/planner/backend/gen/planner/v1;plannerv1";
+
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+// Task represents a task within a project
+message Task {
+  // Unique identifier for the task
+  string id = 1;
+
+  // Name of the task (required)
+  string name = 2;
+
+  // Description of the task
+  string description = 3;
+
+  // Project ID this task belongs to (required)
+  string project_id = 4;
+
+  // Timestamp when the task was created
+  google.protobuf.Timestamp created_at = 5;
+
+  // Timestamp when the task was last updated
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// Request to create a new task
+message CreateTaskRequest {
+  // Name of the task (required)
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 1,
+    max_len: 255
+  }];
+
+  // Description of the task
+  string description = 2 [(buf.validate.field).string.max_len = 10000];
+
+  // Project ID this task belongs to (required)
+  string project_id = 3 [(buf.validate.field).string.uuid = true];
+}
+
+// Response containing the created task
+message CreateTaskResponse {
+  // The created task
+  Task task = 1;
+}
+
+// Request to get a task by ID
+message GetTaskRequest {
+  // ID of the task to retrieve
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+// Response containing the requested task
+message GetTaskResponse {
+  // The requested task
+  Task task = 1;
+}
+
+// Request to list tasks
+message ListTasksRequest {
+  // Optional project ID to filter tasks
+  optional string project_id = 1 [(buf.validate.field).string.uuid = true];
+
+  // Optional pagination limit (future use)
+  int32 page_size = 2;
+
+  // Optional pagination token (future use)
+  string page_token = 3;
+}
+
+// Response containing a list of tasks
+message ListTasksResponse {
+  // List of tasks
+  repeated Task tasks = 1;
+
+  // Token for next page (future use)
+  string next_page_token = 2;
+}
+
+// Request to update an existing task
+message UpdateTaskRequest {
+  // ID of the task to update
+  string id = 1 [(buf.validate.field).string.uuid = true];
+
+  // New name (if provided)
+  optional string name = 2 [(buf.validate.field).string = {
+    min_len: 1,
+    max_len: 255
+  }];
+
+  // New description (if provided)
+  optional string description = 3 [(buf.validate.field).string.max_len = 10000];
+}
+
+// Response containing the updated task
+message UpdateTaskResponse {
+  // The updated task
+  Task task = 1;
+}
+
+// Request to delete a task
+message DeleteTaskRequest {
+  // ID of the task to delete
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+// Response confirming deletion
+message DeleteTaskResponse {
+  // Success status
+  bool success = 1;
+}
+
+// TaskService provides CRUD operations for tasks
+service TaskService {
+  // Create a new task
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+
+  // Get a task by ID
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
+
+  // List tasks (optionally filtered by project)
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+
+  // Update an existing task
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
+
+  // Delete a task
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
+}

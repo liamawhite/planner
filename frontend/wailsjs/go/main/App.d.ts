@@ -6,13 +6,19 @@ export function CreateArea(arg1:string,arg2:string):Promise<plannerv1.Area>;
 
 export function CreateProject(arg1:string,arg2:string):Promise<plannerv1.Project>;
 
+export function CreateTask(arg1:string,arg2:string,arg3:string):Promise<plannerv1.Task>;
+
 export function DeleteArea(arg1:string):Promise<void>;
 
 export function DeleteProject(arg1:string):Promise<void>;
 
+export function DeleteTask(arg1:string):Promise<void>;
+
 export function GetArea(arg1:string):Promise<plannerv1.Area>;
 
 export function GetProject(arg1:string):Promise<plannerv1.Project>;
+
+export function GetTask(arg1:string):Promise<plannerv1.Task>;
 
 export function Greet(arg1:string):Promise<string>;
 
@@ -20,6 +26,10 @@ export function ListAreas():Promise<Array<plannerv1.Area>>;
 
 export function ListProjects(arg1:any):Promise<Array<plannerv1.Project>>;
 
+export function ListTasks(arg1:any):Promise<Array<plannerv1.Task>>;
+
 export function UpdateArea(arg1:string,arg2:any,arg3:any):Promise<plannerv1.Area>;
 
 export function UpdateProject(arg1:string,arg2:any):Promise<plannerv1.Project>;
+
+export function UpdateTask(arg1:string,arg2:any,arg3:any):Promise<plannerv1.Task>;

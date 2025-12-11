@@ -109,3 +109,28 @@ func (a *App) UpdateProject(id string, name *string) (*pb.Project, error) {
 func (a *App) DeleteProject(id string) error {
 	return a.client.DeleteProject(a.ctx, id)
 }
+
+// CreateTask creates a new task
+func (a *App) CreateTask(name, description, projectID string) (*pb.Task, error) {
+	return a.client.CreateTask(a.ctx, name, description, projectID)
+}
+
+// GetTask retrieves a task by ID
+func (a *App) GetTask(id string) (*pb.Task, error) {
+	return a.client.GetTask(a.ctx, id)
+}
+
+// ListTasks lists tasks, optionally filtered by project
+func (a *App) ListTasks(projectID *string) ([]*pb.Task, error) {
+	return a.client.ListTasks(a.ctx, projectID)
+}
+
+// UpdateTask updates an existing task
+func (a *App) UpdateTask(id string, name, description *string) (*pb.Task, error) {
+	return a.client.UpdateTask(a.ctx, id, name, description)
+}
+
+// DeleteTask deletes a task
+func (a *App) DeleteTask(id string) error {
+	return a.client.DeleteTask(a.ctx, id)
+}

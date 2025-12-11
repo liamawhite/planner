@@ -15,6 +15,7 @@ type Client struct {
 	conn           *grpc.ClientConn
 	areaService    pb.AreaServiceClient
 	projectService pb.ProjectServiceClient
+	taskService    pb.TaskServiceClient
 }
 
 // New creates a new client connected to the specified address
@@ -31,6 +32,7 @@ func New(address string) (*Client, error) {
 		conn:           conn,
 		areaService:    pb.NewAreaServiceClient(conn),
 		projectService: pb.NewProjectServiceClient(conn),
+		taskService:    pb.NewTaskServiceClient(conn),
 	}, nil
 }
 
@@ -146,6 +148,64 @@ func (c *Client) UpdateProject(ctx context.Context, id string, name *string) (*p
 // DeleteProject deletes a project
 func (c *Client) DeleteProject(ctx context.Context, id string) error {
 	_, err := c.projectService.DeleteProject(ctx, &pb.DeleteProjectRequest{
+		Id: id,
+	})
+	return err
+}
+
+// CreateTask creates a new task
+func (c *Client) CreateTask(ctx context.Context, name, description, projectID string) (*pb.Task, error) {
+	resp, err := c.taskService.CreateTask(ctx, &pb.CreateTaskRequest{
+		Name:        name,
+		Description: description,
+		ProjectId:   projectID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resp.Task, nil
+}
+
+// GetTask retrieves a task by ID
+func (c *Client) GetTask(ctx context.Context, id string) (*pb.Task, error) {
+	resp, err := c.taskService.GetTask(ctx, &pb.GetTaskRequest{
+		Id: id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resp.Task, nil
+}
+
+// ListTasks lists tasks, optionally filtered by project
+func (c *Client) ListTasks(ctx context.Context, projectID *string) ([]*pb.Task, error) {
+	req := &pb.ListTasksRequest{}
+	if projectID != nil {
+		req.ProjectId = projectID
+	}
+	resp, err := c.taskService.ListTasks(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Tasks, nil
+}
+
+// UpdateTask updates an existing task
+func (c *Client) UpdateTask(ctx context.Context, id string, name, description *string) (*pb.Task, error) {
+	resp, err := c.taskService.UpdateTask(ctx, &pb.UpdateTaskRequest{
+		Id:          id,
+		Name:        name,
+		Description: description,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resp.Task, nil
+}
+
+// DeleteTask deletes a task
+func (c *Client) DeleteTask(ctx context.Context, id string) error {
+	_, err := c.taskService.DeleteTask(ctx, &pb.DeleteTaskRequest{
 		Id: id,
 	})
 	return err

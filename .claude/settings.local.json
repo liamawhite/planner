@@ -20,7 +20,8 @@
       "Bash(make build:*)",
       "Bash(mkdir:*)",
       "Bash(go build:*)",
-      "Bash(npx shadcn@latest add select:*)"
+      "Bash(npx shadcn@latest add select:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,20 +1,23 @@
 import { Link, useRouterState } from '@tanstack/react-router'
+import { Calendar } from 'lucide-react'
 
 export function Navbar() {
   const router = useRouterState()
   const pathname = router.location.pathname
 
   const navItems = [
-    { label: 'Dashboard', path: '/' },
     { label: 'Areas', path: '/areas' },
     { label: 'Projects', path: '/projects' },
+    { label: 'Tasks', path: '/tasks' },
   ]
 
   return (
     <nav className="border-b bg-card">
       <div className="max-w-5xl mx-auto px-6 py-3">
         <div className="flex items-center gap-1">
-          <h1 className="text-xl font-semibold mr-6">Planner</h1>
+          <Link to="/" className="mr-6 hover:opacity-70 transition-opacity">
+            <Calendar className="h-6 w-6" />
+          </Link>
           <div className="flex gap-1">
             {navItems.map(item => (
               <Link
