@@ -6,6 +6,7 @@
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
+  "frontend:dir": ".",
   "author": {
     "name": "Liam White",
     "email": "liamawhite@gmail.com"

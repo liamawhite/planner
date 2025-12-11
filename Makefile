@@ -1,4 +1,4 @@
-.PHONY: install dev build build-darwin build-windows build-linux clean test lint format help
+.PHONY: install dev build build-darwin build-windows build-linux clean test lint format gen server help
 
 # Use nix develop shell if nix is available and we're not already in one
 ifndef IN_NIX_SHELL
@@ -10,25 +10,33 @@ endif
 install: ## Install frontend dependencies
 	cd frontend && npm install
 
-dev: ## Run application in development mode
-	wails dev
+gen: ## Generate code (protobuf + sqlc)
+	cd backend && buf generate
+	cd backend/db && sqlc generate
 
-build: ## Build application for production
-	wails build
+dev: ## Run application in development mode
+	cd frontend && wails dev
+
+build: gen install ## Build application for production
+	cd frontend && wails build
 
 build-darwin: ## Build for macOS
-	wails build -platform darwin/universal
+	cd frontend && wails build -platform darwin/universal
 
 build-windows: ## Build for Windows
-	wails build -platform windows/amd64
+	cd frontend && wails build -platform windows/amd64
 
 build-linux: ## Build for Linux
-	wails build -platform linux/amd64
+	cd frontend && wails build -platform linux/amd64
 
-clean: ## Clean build artifacts
-	rm -rf build/bin
-	rm -rf frontend/dist
-	rm -rf frontend/node_modules
+server: gen ## Build standalone gRPC server
+	cd backend && go build -o ../build/server/planner-server ./cmd/server
+
+clean: ## Clean build artifacts and generated code
+	rm -rf build/
+	rm -rf frontend/dist frontend/node_modules frontend/wailsjs
+	rm -rf backend/gen/planner
+	rm -rf backend/db/*.sql.go backend/db/db.go backend/db/models.go backend/db/querier.go
 
 test: ## Run Go tests
 	go test ./...

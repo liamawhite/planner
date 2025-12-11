@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package planner.v1;
+
+option go_package = "github.com/liamawhite/planner/backend/gen/planner/v1;plannerv1";
+
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+// Area represents a logical area or category in the planning system
+message Area {
+  // Unique identifier for the area
+  string id = 1;
+
+  // Name of the area (required)
+  string name = 2;
+
+  // Optional description of the area
+  string description = 3;
+
+  // Timestamp when the area was created
+  google.protobuf.Timestamp created_at = 4;
+
+  // Timestamp when the area was last updated
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Request to create a new area
+message CreateAreaRequest {
+  // Name of the area (required)
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 1,
+    max_len: 255
+  }];
+
+  // Optional description of the area
+  string description = 2 [(buf.validate.field).string.max_len = 1000];
+}
+
+// Response containing the created area
+message CreateAreaResponse {
+  // The created area
+  Area area = 1;
+}
+
+// Request to get an area by ID
+message GetAreaRequest {
+  // ID of the area to retrieve
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+// Response containing the requested area
+message GetAreaResponse {
+  // The requested area
+  Area area = 1;
+}
+
+// Request to list all areas
+message ListAreasRequest {
+  // Optional pagination limit (future use)
+  int32 page_size = 1;
+
+  // Optional pagination token (future use)
+  string page_token = 2;
+}
+
+// Response containing a list of areas
+message ListAreasResponse {
+  // List of areas
+  repeated Area areas = 1;
+
+  // Token for next page (future use)
+  string next_page_token = 2;
+}
+
+// Request to update an existing area
+message UpdateAreaRequest {
+  // ID of the area to update
+  string id = 1 [(buf.validate.field).string.uuid = true];
+
+  // New name (if provided)
+  optional string name = 2 [(buf.validate.field).string = {
+    min_len: 1,
+    max_len: 255
+  }];
+
+  // New description (if provided)
+  optional string description = 3 [(buf.validate.field).string.max_len = 1000];
+}
+
+// Response containing the updated area
+message UpdateAreaResponse {
+  // The updated area
+  Area area = 1;
+}
+
+// Request to delete an area
+message DeleteAreaRequest {
+  // ID of the area to delete
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+// Response confirming deletion
+message DeleteAreaResponse {
+  // Success status
+  bool success = 1;
+}
+
+// AreaService provides CRUD operations for areas
+service AreaService {
+  // Create a new area
+  rpc CreateArea(CreateAreaRequest) returns (CreateAreaResponse);
+
+  // Get an area by ID
+  rpc GetArea(GetAreaRequest) returns (GetAreaResponse);
+
+  // List all areas
+  rpc ListAreas(ListAreasRequest) returns (ListAreasResponse);
+
+  // Update an existing area
+  rpc UpdateArea(UpdateAreaRequest) returns (UpdateAreaResponse);
+
+  // Delete an area
+  rpc DeleteArea(DeleteAreaRequest) returns (DeleteAreaResponse);
+}

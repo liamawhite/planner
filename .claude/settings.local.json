@@ -5,7 +5,19 @@
       "Bash(wails init:*)",
       "Bash(make dev:*)",
       "Bash(nix develop:*)",
-      "Bash(make help:*)"
+      "Bash(make help:*)",
+      "Bash(tree:*)",
+      "Bash(go mod tidy:*)",
+      "Bash(buf build:*)",
+      "Bash(buf generate:*)",
+      "Bash(buf dep update:*)",
+      "WebFetch(domain:protovalidate.com)",
+      "Bash(go get:*)",
+      "Bash(cat:*)",
+      "Bash(make gen:*)",
+      "Bash(sqlc generate:*)",
+      "Bash(make server:*)",
+      "Bash(make build:*)"
     ],
     "deny": [],
     "ask": []

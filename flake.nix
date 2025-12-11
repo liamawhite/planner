@@ -33,6 +33,8 @@
 
             # Build tools
             pkg-config
+            buf
+            sqlc
 
             # macOS dependencies
           ] ++ darwinDeps;
