@@ -26,6 +26,9 @@ func New(store *db.Store) *Server {
 	areaService := NewAreaService(store)
 	pb.RegisterAreaServiceServer(grpcServer, areaService)
 
+	projectService := NewProjectService(store)
+	pb.RegisterProjectServiceServer(grpcServer, projectService)
+
 	// Register reflection service for debugging
 	reflection.Register(grpcServer)
 

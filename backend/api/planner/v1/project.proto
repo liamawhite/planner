@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package planner.v1;
+
+option go_package = "github.com/liamawhite/planner/backend/gen/planner/v1;plannerv1";
+
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+// Project represents a project within an area
+message Project {
+  // Unique identifier for the project
+  string id = 1;
+
+  // Name of the project (required)
+  string name = 2;
+
+  // Area ID this project belongs to (required)
+  string area_id = 3;
+
+  // Timestamp when the project was created
+  google.protobuf.Timestamp created_at = 4;
+
+  // Timestamp when the project was last updated
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Request to create a new project
+message CreateProjectRequest {
+  // Name of the project (required)
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 1,
+    max_len: 255
+  }];
+
+  // Area ID this project belongs to (required)
+  string area_id = 2 [(buf.validate.field).string.uuid = true];
+}
+
+// Response containing the created project
+message CreateProjectResponse {
+  // The created project
+  Project project = 1;
+}
+
+// Request to get a project by ID
+message GetProjectRequest {
+  // ID of the project to retrieve
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+// Response containing the requested project
+message GetProjectResponse {
+  // The requested project
+  Project project = 1;
+}
+
+// Request to list projects
+message ListProjectsRequest {
+  // Optional area ID to filter projects
+  optional string area_id = 1 [(buf.validate.field).string.uuid = true];
+
+  // Optional pagination limit (future use)
+  int32 page_size = 2;
+
+  // Optional pagination token (future use)
+  string page_token = 3;
+}
+
+// Response containing a list of projects
+message ListProjectsResponse {
+  // List of projects
+  repeated Project projects = 1;
+
+  // Token for next page (future use)
+  string next_page_token = 2;
+}
+
+// Request to update an existing project
+message UpdateProjectRequest {
+  // ID of the project to update
+  string id = 1 [(buf.validate.field).string.uuid = true];
+
+  // New name (if provided)
+  optional string name = 2 [(buf.validate.field).string = {
+    min_len: 1,
+    max_len: 255
+  }];
+}
+
+// Response containing the updated project
+message UpdateProjectResponse {
+  // The updated project
+  Project project = 1;
+}
+
+// Request to delete a project
+message DeleteProjectRequest {
+  // ID of the project to delete
+  string id = 1 [(buf.validate.field).string.uuid = true];
+}
+
+// Response confirming deletion
+message DeleteProjectResponse {
+  // Success status
+  bool success = 1;
+}
+
+// ProjectService provides CRUD operations for projects
+service ProjectService {
+  // Create a new project
+  rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse);
+
+  // Get a project by ID
+  rpc GetProject(GetProjectRequest) returns (GetProjectResponse);
+
+  // List projects (optionally filtered by area)
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse);
+
+  // Update an existing project
+  rpc UpdateProject(UpdateProjectRequest) returns (UpdateProjectResponse);
+
+  // Delete a project
+  rpc DeleteProject(DeleteProjectRequest) returns (DeleteProjectResponse);
+}

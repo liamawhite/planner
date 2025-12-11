@@ -6,12 +6,24 @@ export function CreateArea(arg1, arg2) {
   return window['go']['main']['App']['CreateArea'](arg1, arg2);
 }
 
+export function CreateProject(arg1, arg2) {
+  return window['go']['main']['App']['CreateProject'](arg1, arg2);
+}
+
 export function DeleteArea(arg1) {
   return window['go']['main']['App']['DeleteArea'](arg1);
 }
 
+export function DeleteProject(arg1) {
+  return window['go']['main']['App']['DeleteProject'](arg1);
+}
+
 export function GetArea(arg1) {
   return window['go']['main']['App']['GetArea'](arg1);
+}
+
+export function GetProject(arg1) {
+  return window['go']['main']['App']['GetProject'](arg1);
 }
 
 export function Greet(arg1) {
@@ -22,6 +34,14 @@ export function ListAreas() {
   return window['go']['main']['App']['ListAreas']();
 }
 
+export function ListProjects(arg1) {
+  return window['go']['main']['App']['ListProjects'](arg1);
+}
+
 export function UpdateArea(arg1, arg2, arg3) {
   return window['go']['main']['App']['UpdateArea'](arg1, arg2, arg3);
+}
+
+export function UpdateProject(arg1, arg2) {
+  return window['go']['main']['App']['UpdateProject'](arg1, arg2);
 }

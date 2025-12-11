@@ -84,3 +84,28 @@ func (a *App) UpdateArea(id string, name, description *string) (*pb.Area, error)
 func (a *App) DeleteArea(id string) error {
 	return a.client.DeleteArea(a.ctx, id)
 }
+
+// CreateProject creates a new project
+func (a *App) CreateProject(name, areaID string) (*pb.Project, error) {
+	return a.client.CreateProject(a.ctx, name, areaID)
+}
+
+// GetProject retrieves a project by ID
+func (a *App) GetProject(id string) (*pb.Project, error) {
+	return a.client.GetProject(a.ctx, id)
+}
+
+// ListProjects lists projects, optionally filtered by area
+func (a *App) ListProjects(areaID *string) ([]*pb.Project, error) {
+	return a.client.ListProjects(a.ctx, areaID)
+}
+
+// UpdateProject updates an existing project
+func (a *App) UpdateProject(id string, name *string) (*pb.Project, error) {
+	return a.client.UpdateProject(a.ctx, id, name)
+}
+
+// DeleteProject deletes a project
+func (a *App) DeleteProject(id string) error {
+	return a.client.DeleteProject(a.ctx, id)
+}
