@@ -98,10 +98,11 @@ func (c *Client) DeleteArea(ctx context.Context, id string) error {
 }
 
 // CreateProject creates a new project
-func (c *Client) CreateProject(ctx context.Context, name, areaID string) (*pb.Project, error) {
+func (c *Client) CreateProject(ctx context.Context, name, areaID, notes string) (*pb.Project, error) {
 	resp, err := c.projectService.CreateProject(ctx, &pb.CreateProjectRequest{
 		Name:   name,
 		AreaId: areaID,
+		Notes:  notes,
 	})
 	if err != nil {
 		return nil, err
@@ -134,10 +135,11 @@ func (c *Client) ListProjects(ctx context.Context, areaID *string) ([]*pb.Projec
 }
 
 // UpdateProject updates an existing project
-func (c *Client) UpdateProject(ctx context.Context, id string, name *string) (*pb.Project, error) {
+func (c *Client) UpdateProject(ctx context.Context, id string, name, notes *string) (*pb.Project, error) {
 	resp, err := c.projectService.UpdateProject(ctx, &pb.UpdateProjectRequest{
-		Id:   id,
-		Name: name,
+		Id:    id,
+		Name:  name,
+		Notes: notes,
 	})
 	if err != nil {
 		return nil, err
@@ -154,11 +156,11 @@ func (c *Client) DeleteProject(ctx context.Context, id string) error {
 }
 
 // CreateTask creates a new task
-func (c *Client) CreateTask(ctx context.Context, name, description, projectID string) (*pb.Task, error) {
+func (c *Client) CreateTask(ctx context.Context, name, notes, projectID string) (*pb.Task, error) {
 	resp, err := c.taskService.CreateTask(ctx, &pb.CreateTaskRequest{
-		Name:        name,
-		Description: description,
-		ProjectId:   projectID,
+		Name:      name,
+		Notes:     notes,
+		ProjectId: projectID,
 	})
 	if err != nil {
 		return nil, err
@@ -191,11 +193,11 @@ func (c *Client) ListTasks(ctx context.Context, projectID *string) ([]*pb.Task, 
 }
 
 // UpdateTask updates an existing task
-func (c *Client) UpdateTask(ctx context.Context, id string, name, description *string) (*pb.Task, error) {
+func (c *Client) UpdateTask(ctx context.Context, id string, name, notes *string) (*pb.Task, error) {
 	resp, err := c.taskService.UpdateTask(ctx, &pb.UpdateTaskRequest{
-		Id:          id,
-		Name:        name,
-		Description: description,
+		Id:    id,
+		Name:  name,
+		Notes: notes,
 	})
 	if err != nil {
 		return nil, err

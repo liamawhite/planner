@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-import { CreateProject, ListProjects, UpdateProject, DeleteProject, ListAreas } from '../../wailsjs/go/main/App'
+import { Link } from '@tanstack/react-router'
+import { CreateProject, ListProjects, UpdateProject, DeleteProject, ListAreas, ListTasks } from '../../wailsjs/go/main/App'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface Area {
@@ -16,6 +18,7 @@ interface Project {
   id: string
   name: string
   area_id: string
+  notes: string
   created_at: any
   updated_at: any
 }
@@ -25,6 +28,7 @@ export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([])
   const [projectName, setProjectName] = useState('')
   const [projectAreaId, setProjectAreaId] = useState('')
+  const [projectNotes, setProjectNotes] = useState('')
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null)
   const [filterAreaId, setFilterAreaId] = useState<string | null>(null)
   const [error, setError] = useState('')
@@ -68,13 +72,14 @@ export default function Projects() {
 
     try {
       if (editingProjectId) {
-        await UpdateProject(editingProjectId, projectName || null)
+        await UpdateProject(editingProjectId, projectName || null, projectNotes || null)
       } else {
-        await CreateProject(projectName, projectAreaId)
+        await CreateProject(projectName, projectAreaId, projectNotes)
       }
 
       setProjectName('')
       setProjectAreaId('')
+      setProjectNotes('')
       setEditingProjectId(null)
       setError('')
       await loadProjects()
@@ -84,6 +89,18 @@ export default function Projects() {
   }
 
   async function handleDeleteProject(id: string) {
+    // Check if project has tasks
+    try {
+      const tasks = await ListTasks(id)
+      if (tasks && tasks.length > 0) {
+        setError('Cannot delete project with existing tasks. Please delete all tasks first.')
+        return
+      }
+    } catch (err) {
+      setError(`Failed to check project tasks: ${err}`)
+      return
+    }
+
     if (!confirm('Are you sure you want to delete this project?')) {
       return
     }
@@ -101,12 +118,14 @@ export default function Projects() {
     setEditingProjectId(project.id)
     setProjectName(project.name)
     setProjectAreaId(project.area_id)
+    setProjectNotes(project.notes)
   }
 
   function handleCancelProjectEdit() {
     setEditingProjectId(null)
     setProjectName('')
     setProjectAreaId('')
+    setProjectNotes('')
   }
 
   function getAreaName(areaId: string): string {
@@ -165,6 +184,18 @@ export default function Projects() {
               </Select>
             </div>
           </div>
+          <div className="space-y-2">
+            <label htmlFor="projectNotes" className="text-sm font-medium leading-none">
+              Notes
+            </label>
+            <Textarea
+              id="projectNotes"
+              placeholder="Additional notes or details about this project..."
+              value={projectNotes}
+              onChange={(e) => setProjectNotes(e.target.value)}
+              className="min-h-[100px]"
+            />
+          </div>
           <div className="flex gap-2">
             <Button type="submit">
               {editingProjectId ? 'Update' : 'Add Project'}
@@ -219,27 +250,40 @@ export default function Projects() {
                   key={project.id}
                   className="flex items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50"
                 >
-                  <div className="space-y-0.5">
-                    <h3 className="font-medium leading-none">{project.name}</h3>
+                  <div className="flex-1 space-y-0.5">
+                    <Link
+                      to="/projects/$projectId"
+                      params={{ projectId: project.id }}
+                    >
+                      <h3 className="font-medium leading-none hover:underline cursor-pointer">{project.name}</h3>
+                    </Link>
                     <p className="text-sm text-muted-foreground">
                       {getAreaName(project.area_id)}
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleEditProject(project)}
+                      className="h-8 w-8"
                     >
-                      Edit
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                        <path d="m15 5 4 4"/>
+                      </svg>
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleDeleteProject(project.id)}
-                      className="text-destructive hover:text-destructive"
+                      className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                     >
-                      Delete
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 6h18"/>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      </svg>
                     </Button>
                   </div>
                 </div>

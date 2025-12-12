@@ -2,7 +2,7 @@
 INSERT INTO tasks (
     id,
     name,
-    description,
+    notes,
     project_id,
     created_at,
     updated_at
@@ -23,7 +23,7 @@ ORDER BY created_at DESC;
 UPDATE tasks
 SET
     name = COALESCE(sqlc.narg('name'), name),
-    description = COALESCE(sqlc.narg('description'), description),
+    notes = COALESCE(sqlc.narg('notes'), notes),
     updated_at = sqlc.arg('updated_at')
 WHERE id = sqlc.arg('id')
 RETURNING *;

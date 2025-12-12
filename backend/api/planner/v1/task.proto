@@ -15,8 +15,8 @@ message Task {
   // Name of the task (required)
   string name = 2;
 
-  // Description of the task
-  string description = 3;
+  // Notes for the task
+  string notes = 3;
 
   // Project ID this task belongs to (required)
   string project_id = 4;
@@ -36,8 +36,8 @@ message CreateTaskRequest {
     max_len: 255
   }];
 
-  // Description of the task
-  string description = 2 [(buf.validate.field).string.max_len = 10000];
+  // Notes for the task
+  string notes = 2 [(buf.validate.field).string.max_len = 10000];
 
   // Project ID this task belongs to (required)
   string project_id = 3 [(buf.validate.field).string.uuid = true];
@@ -93,8 +93,8 @@ message UpdateTaskRequest {
     max_len: 255
   }];
 
-  // New description (if provided)
-  optional string description = 3 [(buf.validate.field).string.max_len = 10000];
+  // New notes (if provided)
+  optional string notes = 3 [(buf.validate.field).string.max_len = 10000];
 }
 
 // Response containing the updated task

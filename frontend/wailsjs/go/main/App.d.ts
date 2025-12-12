@@ -4,7 +4,7 @@ import {plannerv1} from '../models';
 
 export function CreateArea(arg1:string,arg2:string):Promise<plannerv1.Area>;
 
-export function CreateProject(arg1:string,arg2:string):Promise<plannerv1.Project>;
+export function CreateProject(arg1:string,arg2:string,arg3:string):Promise<plannerv1.Project>;
 
 export function CreateTask(arg1:string,arg2:string,arg3:string):Promise<plannerv1.Task>;
 
@@ -30,6 +30,6 @@ export function ListTasks(arg1:any):Promise<Array<plannerv1.Task>>;
 
 export function UpdateArea(arg1:string,arg2:any,arg3:any):Promise<plannerv1.Area>;
 
-export function UpdateProject(arg1:string,arg2:any):Promise<plannerv1.Project>;
+export function UpdateProject(arg1:string,arg2:any,arg3:any):Promise<plannerv1.Project>;
 
 export function UpdateTask(arg1:string,arg2:any,arg3:any):Promise<plannerv1.Task>;

@@ -18,11 +18,14 @@ message Project {
   // Area ID this project belongs to (required)
   string area_id = 3;
 
+  // Notes for the project
+  string notes = 4;
+
   // Timestamp when the project was created
-  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp created_at = 5;
 
   // Timestamp when the project was last updated
-  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 // Request to create a new project
@@ -35,6 +38,9 @@ message CreateProjectRequest {
 
   // Area ID this project belongs to (required)
   string area_id = 2 [(buf.validate.field).string.uuid = true];
+
+  // Notes for the project
+  string notes = 3 [(buf.validate.field).string.max_len = 10000];
 }
 
 // Response containing the created project
@@ -86,6 +92,9 @@ message UpdateProjectRequest {
     min_len: 1,
     max_len: 255
   }];
+
+  // New notes (if provided)
+  optional string notes = 3 [(buf.validate.field).string.max_len = 10000];
 }
 
 // Response containing the updated project

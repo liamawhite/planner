@@ -52,6 +52,7 @@ func (s *ProjectService) CreateProject(ctx context.Context, req *pb.CreateProjec
 		ID:        id,
 		Name:      req.Name,
 		AreaID:    req.AreaId,
+		Notes:     req.Notes,
 		CreatedAt: now,
 		UpdatedAt: now,
 	})
@@ -126,9 +127,15 @@ func (s *ProjectService) UpdateProject(ctx context.Context, req *pb.UpdateProjec
 		name = sql.NullString{String: *req.Name, Valid: true}
 	}
 
+	var notes sql.NullString
+	if req.Notes != nil {
+		notes = sql.NullString{String: *req.Notes, Valid: true}
+	}
+
 	project, err := s.store.Queries.UpdateProject(ctx, db.UpdateProjectParams{
 		ID:        req.Id,
 		Name:      name,
+		Notes:     notes,
 		UpdatedAt: time.Now(),
 	})
 	if err != nil {
@@ -170,6 +177,7 @@ func dbProjectToProto(project db.Project) *pb.Project {
 		Id:        project.ID,
 		Name:      project.Name,
 		AreaId:    project.AreaID,
+		Notes:     project.Notes,
 		CreatedAt: timestamppb.New(project.CreatedAt),
 		UpdatedAt: timestamppb.New(project.UpdatedAt),
 	}

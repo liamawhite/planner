@@ -3,10 +3,11 @@ INSERT INTO projects (
     id,
     name,
     area_id,
+    notes,
     created_at,
     updated_at
 ) VALUES (
-    ?, ?, ?, ?, ?
+    ?, ?, ?, ?, ?, ?
 ) RETURNING *;
 
 -- name: GetProject :one
@@ -22,6 +23,7 @@ ORDER BY created_at DESC;
 UPDATE projects
 SET
     name = COALESCE(sqlc.narg('name'), name),
+    notes = COALESCE(sqlc.narg('notes'), notes),
     updated_at = sqlc.arg('updated_at')
 WHERE id = sqlc.arg('id')
 RETURNING *;

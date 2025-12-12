@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CreateArea, ListAreas, UpdateArea, DeleteArea } from '../../wailsjs/go/main/App'
+import { CreateArea, ListAreas, UpdateArea, DeleteArea, ListProjects } from '../../wailsjs/go/main/App'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -53,6 +53,18 @@ export default function Areas() {
   }
 
   async function handleDelete(id: string) {
+    // Check if area has projects
+    try {
+      const projects = await ListProjects(id)
+      if (projects && projects.length > 0) {
+        setError('Cannot delete area with existing projects. Please delete all projects first.')
+        return
+      }
+    } catch (err) {
+      setError(`Failed to check area projects: ${err}`)
+      return
+    }
+
     if (!confirm('Are you sure you want to delete this area?')) {
       return
     }
@@ -152,21 +164,29 @@ export default function Areas() {
                       <p className="text-sm text-muted-foreground">{area.description}</p>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleEdit(area)}
+                      className="h-8 w-8"
                     >
-                      Edit
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                        <path d="m15 5 4 4"/>
+                      </svg>
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => handleDelete(area.id)}
-                      className="text-destructive hover:text-destructive"
+                      className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                     >
-                      Delete
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 6h18"/>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      </svg>
                     </Button>
                   </div>
                 </div>

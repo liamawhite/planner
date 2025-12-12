@@ -86,8 +86,8 @@ func (a *App) DeleteArea(id string) error {
 }
 
 // CreateProject creates a new project
-func (a *App) CreateProject(name, areaID string) (*pb.Project, error) {
-	return a.client.CreateProject(a.ctx, name, areaID)
+func (a *App) CreateProject(name, areaID, notes string) (*pb.Project, error) {
+	return a.client.CreateProject(a.ctx, name, areaID, notes)
 }
 
 // GetProject retrieves a project by ID
@@ -101,8 +101,8 @@ func (a *App) ListProjects(areaID *string) ([]*pb.Project, error) {
 }
 
 // UpdateProject updates an existing project
-func (a *App) UpdateProject(id string, name *string) (*pb.Project, error) {
-	return a.client.UpdateProject(a.ctx, id, name)
+func (a *App) UpdateProject(id string, name, notes *string) (*pb.Project, error) {
+	return a.client.UpdateProject(a.ctx, id, name, notes)
 }
 
 // DeleteProject deletes a project
@@ -111,8 +111,8 @@ func (a *App) DeleteProject(id string) error {
 }
 
 // CreateTask creates a new task
-func (a *App) CreateTask(name, description, projectID string) (*pb.Task, error) {
-	return a.client.CreateTask(a.ctx, name, description, projectID)
+func (a *App) CreateTask(name, notes, projectID string) (*pb.Task, error) {
+	return a.client.CreateTask(a.ctx, name, notes, projectID)
 }
 
 // GetTask retrieves a task by ID
@@ -126,8 +126,8 @@ func (a *App) ListTasks(projectID *string) ([]*pb.Task, error) {
 }
 
 // UpdateTask updates an existing task
-func (a *App) UpdateTask(id string, name, description *string) (*pb.Task, error) {
-	return a.client.UpdateTask(a.ctx, id, name, description)
+func (a *App) UpdateTask(id string, name, notes *string) (*pb.Task, error) {
+	return a.client.UpdateTask(a.ctx, id, name, notes)
 }
 
 // DeleteTask deletes a task

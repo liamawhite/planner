@@ -30,8 +30,8 @@ type Task struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Name of the task (required)
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	// Description of the task
-	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Notes for the task
+	Notes string `protobuf:"bytes,3,opt,name=notes,proto3" json:"notes,omitempty"`
 	// Project ID this task belongs to (required)
 	ProjectId string `protobuf:"bytes,4,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
 	// Timestamp when the task was created
@@ -86,9 +86,9 @@ func (x *Task) GetName() string {
 	return ""
 }
 
-func (x *Task) GetDescription() string {
+func (x *Task) GetNotes() string {
 	if x != nil {
-		return x.Description
+		return x.Notes
 	}
 	return ""
 }
@@ -119,8 +119,8 @@ type CreateTaskRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Name of the task (required)
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Description of the task
-	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// Notes for the task
+	Notes string `protobuf:"bytes,2,opt,name=notes,proto3" json:"notes,omitempty"`
 	// Project ID this task belongs to (required)
 	ProjectId     string `protobuf:"bytes,3,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -164,9 +164,9 @@ func (x *CreateTaskRequest) GetName() string {
 	return ""
 }
 
-func (x *CreateTaskRequest) GetDescription() string {
+func (x *CreateTaskRequest) GetNotes() string {
 	if x != nil {
-		return x.Description
+		return x.Notes
 	}
 	return ""
 }
@@ -442,8 +442,8 @@ type UpdateTaskRequest struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// New name (if provided)
 	Name *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	// New description (if provided)
-	Description   *string `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	// New notes (if provided)
+	Notes         *string `protobuf:"bytes,3,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -492,9 +492,9 @@ func (x *UpdateTaskRequest) GetName() string {
 	return ""
 }
 
-func (x *UpdateTaskRequest) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
+func (x *UpdateTaskRequest) GetNotes() string {
+	if x != nil && x.Notes != nil {
+		return *x.Notes
 	}
 	return ""
 }
@@ -642,21 +642,21 @@ var File_planner_v1_task_proto protoreflect.FileDescriptor
 const file_planner_v1_task_proto_rawDesc = "" +
 	"\n" +
 	"\x15planner/v1/task.proto\x12\n" +
-	"planner.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"\xe1\x01\n" +
+	"planner.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"\xd5\x01\n" +
 	"\x04Task\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1d\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05notes\x18\x03 \x01(\tR\x05notes\x12\x1d\n" +
 	"\n" +
 	"project_id\x18\x04 \x01(\tR\tprojectId\x129\n" +
 	"\n" +
 	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x88\x01\n" +
+	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"|\n" +
 	"\x11CreateTaskRequest\x12\x1e\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\xff\x01R\x04name\x12*\n" +
-	"\vdescription\x18\x02 \x01(\tB\b\xbaH\x05r\x03\x18\x90NR\vdescription\x12'\n" +
+	"\xbaH\ar\x05\x10\x01\x18\xff\x01R\x04name\x12\x1e\n" +
+	"\x05notes\x18\x02 \x01(\tB\b\xbaH\x05r\x03\x18\x90NR\x05notes\x12'\n" +
 	"\n" +
 	"project_id\x18\x03 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\tprojectId\":\n" +
 	"\x12CreateTaskResponse\x12$\n" +
@@ -674,14 +674,14 @@ const file_planner_v1_task_proto_rawDesc = "" +
 	"\v_project_id\"c\n" +
 	"\x11ListTasksResponse\x12&\n" +
 	"\x05tasks\x18\x01 \x03(\v2\x10.planner.v1.TaskR\x05tasks\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"\x9c\x01\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"\x8a\x01\n" +
 	"\x11UpdateTaskRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12#\n" +
 	"\x04name\x18\x02 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\xff\x01H\x00R\x04name\x88\x01\x01\x12/\n" +
-	"\vdescription\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x90NH\x01R\vdescription\x88\x01\x01B\a\n" +
-	"\x05_nameB\x0e\n" +
-	"\f_description\":\n" +
+	"\xbaH\ar\x05\x10\x01\x18\xff\x01H\x00R\x04name\x88\x01\x01\x12#\n" +
+	"\x05notes\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x90NH\x01R\x05notes\x88\x01\x01B\a\n" +
+	"\x05_nameB\b\n" +
+	"\x06_notes\":\n" +
 	"\x12UpdateTaskResponse\x12$\n" +
 	"\x04task\x18\x01 \x01(\v2\x10.planner.v1.TaskR\x04task\"-\n" +
 	"\x11DeleteTaskRequest\x12\x18\n" +

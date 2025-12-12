@@ -32,10 +32,12 @@ type Project struct {
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	// Area ID this project belongs to (required)
 	AreaId string `protobuf:"bytes,3,opt,name=area_id,json=areaId,proto3" json:"area_id,omitempty"`
+	// Notes for the project
+	Notes string `protobuf:"bytes,4,opt,name=notes,proto3" json:"notes,omitempty"`
 	// Timestamp when the project was created
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	// Timestamp when the project was last updated
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -91,6 +93,13 @@ func (x *Project) GetAreaId() string {
 	return ""
 }
 
+func (x *Project) GetNotes() string {
+	if x != nil {
+		return x.Notes
+	}
+	return ""
+}
+
 func (x *Project) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
@@ -111,7 +120,9 @@ type CreateProjectRequest struct {
 	// Name of the project (required)
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Area ID this project belongs to (required)
-	AreaId        string `protobuf:"bytes,2,opt,name=area_id,json=areaId,proto3" json:"area_id,omitempty"`
+	AreaId string `protobuf:"bytes,2,opt,name=area_id,json=areaId,proto3" json:"area_id,omitempty"`
+	// Notes for the project
+	Notes         string `protobuf:"bytes,3,opt,name=notes,proto3" json:"notes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -156,6 +167,13 @@ func (x *CreateProjectRequest) GetName() string {
 func (x *CreateProjectRequest) GetAreaId() string {
 	if x != nil {
 		return x.AreaId
+	}
+	return ""
+}
+
+func (x *CreateProjectRequest) GetNotes() string {
+	if x != nil {
+		return x.Notes
 	}
 	return ""
 }
@@ -423,7 +441,9 @@ type UpdateProjectRequest struct {
 	// ID of the project to update
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// New name (if provided)
-	Name          *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Name *string `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	// New notes (if provided)
+	Notes         *string `protobuf:"bytes,3,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -468,6 +488,13 @@ func (x *UpdateProjectRequest) GetId() string {
 func (x *UpdateProjectRequest) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
+	}
+	return ""
+}
+
+func (x *UpdateProjectRequest) GetNotes() string {
+	if x != nil && x.Notes != nil {
+		return *x.Notes
 	}
 	return ""
 }
@@ -615,19 +642,21 @@ var File_planner_v1_project_proto protoreflect.FileDescriptor
 const file_planner_v1_project_proto_rawDesc = "" +
 	"\n" +
 	"\x18planner/v1/project.proto\x12\n" +
-	"planner.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"\xbc\x01\n" +
+	"planner.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"\xd2\x01\n" +
 	"\aProject\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x17\n" +
-	"\aarea_id\x18\x03 \x01(\tR\x06areaId\x129\n" +
+	"\aarea_id\x18\x03 \x01(\tR\x06areaId\x12\x14\n" +
+	"\x05notes\x18\x04 \x01(\tR\x05notes\x129\n" +
 	"\n" +
-	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"Y\n" +
+	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"y\n" +
 	"\x14CreateProjectRequest\x12\x1e\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\xff\x01R\x04name\x12!\n" +
-	"\aarea_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06areaId\"F\n" +
+	"\aarea_id\x18\x02 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06areaId\x12\x1e\n" +
+	"\x05notes\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x90NR\x05notes\"F\n" +
 	"\x15CreateProjectResponse\x12-\n" +
 	"\aproject\x18\x01 \x01(\v2\x13.planner.v1.ProjectR\aproject\"-\n" +
 	"\x11GetProjectRequest\x12\x18\n" +
@@ -643,12 +672,14 @@ const file_planner_v1_project_proto_rawDesc = "" +
 	"\b_area_id\"o\n" +
 	"\x14ListProjectsResponse\x12/\n" +
 	"\bprojects\x18\x01 \x03(\v2\x13.planner.v1.ProjectR\bprojects\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"^\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\"\x8d\x01\n" +
 	"\x14UpdateProjectRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12#\n" +
 	"\x04name\x18\x02 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\xff\x01H\x00R\x04name\x88\x01\x01B\a\n" +
-	"\x05_name\"F\n" +
+	"\xbaH\ar\x05\x10\x01\x18\xff\x01H\x00R\x04name\x88\x01\x01\x12#\n" +
+	"\x05notes\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x90NH\x01R\x05notes\x88\x01\x01B\a\n" +
+	"\x05_nameB\b\n" +
+	"\x06_notes\"F\n" +
 	"\x15UpdateProjectResponse\x12-\n" +
 	"\aproject\x18\x01 \x01(\v2\x13.planner.v1.ProjectR\aproject\"0\n" +
 	"\x14DeleteProjectRequest\x12\x18\n" +

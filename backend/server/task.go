@@ -49,12 +49,12 @@ func (s *TaskService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest)
 	id := uuid.New().String()
 
 	task, err := s.store.Queries.CreateTask(ctx, db.CreateTaskParams{
-		ID:          id,
-		Name:        req.Name,
-		Description: req.Description,
-		ProjectID:   req.ProjectId,
-		CreatedAt:   now,
-		UpdatedAt:   now,
+		ID:        id,
+		Name:      req.Name,
+		Notes:     req.Notes,
+		ProjectID: req.ProjectId,
+		CreatedAt: now,
+		UpdatedAt: now,
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create task: %v", err)
@@ -127,16 +127,16 @@ func (s *TaskService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest)
 		name = sql.NullString{String: *req.Name, Valid: true}
 	}
 
-	var description sql.NullString
-	if req.Description != nil {
-		description = sql.NullString{String: *req.Description, Valid: true}
+	var notes sql.NullString
+	if req.Notes != nil {
+		notes = sql.NullString{String: *req.Notes, Valid: true}
 	}
 
 	task, err := s.store.Queries.UpdateTask(ctx, db.UpdateTaskParams{
-		ID:          req.Id,
-		Name:        name,
-		Description: description,
-		UpdatedAt:   time.Now(),
+		ID:        req.Id,
+		Name:      name,
+		Notes:     notes,
+		UpdatedAt: time.Now(),
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to update task: %v", err)
@@ -174,11 +174,11 @@ func (s *TaskService) DeleteTask(ctx context.Context, req *pb.DeleteTaskRequest)
 // dbTaskToProto converts a database task to a protobuf task
 func dbTaskToProto(task db.Task) *pb.Task {
 	return &pb.Task{
-		Id:          task.ID,
-		Name:        task.Name,
-		Description: task.Description,
-		ProjectId:   task.ProjectID,
-		CreatedAt:   timestamppb.New(task.CreatedAt),
-		UpdatedAt:   timestamppb.New(task.UpdatedAt),
+		Id:        task.ID,
+		Name:      task.Name,
+		Notes:     task.Notes,
+		ProjectId: task.ProjectID,
+		CreatedAt: timestamppb.New(task.CreatedAt),
+		UpdatedAt: timestamppb.New(task.UpdatedAt),
 	}
 }

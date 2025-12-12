@@ -1,4 +1,4 @@
-.PHONY: install dev build build-darwin build-windows build-linux clean test lint format gen server help
+.PHONY: install dev build build-darwin build-windows build-linux clean test test-e2e test-e2e-ui test-e2e-headed lint format gen server help
 
 # Use nix develop shell if nix is available and we're not already in one
 ifndef IN_NIX_SHELL
@@ -15,6 +15,11 @@ gen: ## Generate code (protobuf + sqlc)
 	cd backend/db && sqlc generate
 
 dev: ## Run application in development mode
+	@echo "Stopping any running instances..."
+	@pkill -f "wails dev" 2>/dev/null || true
+	@pkill -f "planner.app" 2>/dev/null || true
+	@lsof -ti:50051 | xargs kill -9 2>/dev/null || true
+	@sleep 1
 	cd frontend && wails dev
 
 build: gen install ## Build application for production
@@ -40,6 +45,15 @@ clean: ## Clean build artifacts and generated code
 
 test: ## Run Go tests
 	go test ./...
+
+test-e2e: ## Run Playwright E2E tests
+	cd frontend && npm run test
+
+test-e2e-ui: ## Run Playwright E2E tests with UI
+	cd frontend && npm run test:ui
+
+test-e2e-headed: ## Run Playwright E2E tests in headed mode
+	cd frontend && npm run test:headed
 
 lint: ## Run linters
 	cd frontend && npm run lint

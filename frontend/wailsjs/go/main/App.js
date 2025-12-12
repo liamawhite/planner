@@ -6,8 +6,8 @@ export function CreateArea(arg1, arg2) {
   return window['go']['main']['App']['CreateArea'](arg1, arg2);
 }
 
-export function CreateProject(arg1, arg2) {
-  return window['go']['main']['App']['CreateProject'](arg1, arg2);
+export function CreateProject(arg1, arg2, arg3) {
+  return window['go']['main']['App']['CreateProject'](arg1, arg2, arg3);
 }
 
 export function CreateTask(arg1, arg2, arg3) {
@@ -58,8 +58,8 @@ export function UpdateArea(arg1, arg2, arg3) {
   return window['go']['main']['App']['UpdateArea'](arg1, arg2, arg3);
 }
 
-export function UpdateProject(arg1, arg2) {
-  return window['go']['main']['App']['UpdateProject'](arg1, arg2);
+export function UpdateProject(arg1, arg2, arg3) {
+  return window['go']['main']['App']['UpdateProject'](arg1, arg2, arg3);
 }
 
 export function UpdateTask(arg1, arg2, arg3) {
